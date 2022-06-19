@@ -1,5 +1,6 @@
 import {mocks} from './mock-data.js';
-import {createThumbnails} from './thumbnails-creator.js'
+import {createThumbnails} from './thumbnails-creator.js';
+import './form.js';
 
 export const data = mocks();
 
