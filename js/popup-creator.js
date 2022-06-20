@@ -8,6 +8,7 @@ const createPopup = (card) => {
   const closeButton = popupTemplate.querySelector('#picture-cancel');
   const commentsPerPage = 5;
   const buttonShowMore = popupTemplate.querySelector('.comments-loader');
+  const showedCommentsCount = popupTemplate.querySelector('.showed-comments-count');
   const postComments = cardData.comments;
   let showedCommentAmount = commentsPerPage;
 
@@ -65,6 +66,7 @@ const createPopup = (card) => {
 
     if (postComments.length <= commentsToRender.length) {
       buttonShowMore.classList.add('hidden');
+      showedCommentsCount.textContent = `${commentsToRender.length}`;
     } else {
       buttonShowMore.classList.remove('hidden');
     }
@@ -72,9 +74,11 @@ const createPopup = (card) => {
 
   if (postComments.length <= commentsPerPage) {
     buttonShowMore.classList.add('hidden');
+    showedCommentsCount.textContent = `${postComments.length}`;
   } else {
     buttonShowMore.classList.remove('hidden');
     buttonShowMore.addEventListener('click', clickShowMore);
+    showedCommentsCount.textContent = `${commentsPerPage}`;
   }
 
   openPopup();
