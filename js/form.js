@@ -2,6 +2,7 @@ const mainForm = document.querySelector('#upload-select-image');
 const uploadFileInput = document.querySelector('#upload-file');
 const editImagePopup = document.querySelector('.img-upload__overlay');
 const closeButton = document.querySelector('#upload-cancel');
+const hashtagField = document.querySelector('.text__hashtags');
 
 const openEditImagePopup = () => {
   editImagePopup.classList.remove('hidden');
@@ -16,13 +17,28 @@ const closeEditImagePopup = () => {
 };
 const closeEditImagePopupEsc = (evt) => {
   if (evt.key === 'Escape') {
-    closeEditImagePopup();
+    if (evt.target.tagName === 'INPUT' || evt.target.tagName === 'TEXTAREA') {
+      evt.stopPropagation()
+    } else {
+      closeEditImagePopup();
+    }
   }
 };
 
 window.onload = function () {
   // create the pristine instance
   let pristine = new Pristine(mainForm);
+
+  function isBigEnough(element) {
+    return regexp.test(element);
+  }
+
+  pristine.addValidator(hashtagField, function(value) {
+    let hashtags = value.split(' ');
+    let regexp =  /^#[a-zA-Zа-яА-яЁё0-9]{1,19}$/;
+    return hashtags.every(element => regexp.test(element));
+
+  }, "неверный паттерн", 2, false);
 
   mainForm.addEventListener('submit', function (e) {
     e.preventDefault();
