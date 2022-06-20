@@ -29,16 +29,20 @@ window.onload = function () {
   // create the pristine instance
   let pristine = new Pristine(mainForm);
 
-  function isBigEnough(element) {
-    return regexp.test(element);
-  }
-
   pristine.addValidator(hashtagField, function(value) {
     let hashtags = value.split(' ');
     let regexp =  /^#[a-zA-Zа-яА-яЁё0-9]{1,19}$/;
+
+    //TODO: добавить: один и тот же хэш-тег не может быть использован дважды;
+    if (hashtags[0] === '' && hashtags.length === 1) {
+      return true;
+    }
+    if (hashtags.length > 5) {
+      return false;
+    }
     return hashtags.every(element => regexp.test(element));
 
-  }, "неверный паттерн", 2, false);
+  }, "хештег(и) введен(ы) неверно", 2, false);
 
   mainForm.addEventListener('submit', function (e) {
     e.preventDefault();
