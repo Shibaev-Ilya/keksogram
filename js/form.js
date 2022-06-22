@@ -31,18 +31,53 @@ window.onload = function () {
 
   pristine.addValidator(hashtagField, function(value) {
     let hashtags = value.split(' ');
-    let regexp =  /^#[a-zA-Zа-яА-яЁё0-9]{1,19}$/;
-
-    //TODO: добавить: один и тот же хэш-тег не может быть использован дважды;
     if (hashtags[0] === '' && hashtags.length === 1) {
       return true;
     }
-    if (hashtags.length > 5) {
-      return false;
-    }
+    let regexp =  /^#/;
+
     return hashtags.every(element => regexp.test(element));
 
-  }, "хештег(и) введен(ы) неверно", 2, false);
+  }, "хештег должен начинаться с #", 3, true);
+
+  pristine.addValidator(hashtagField, function(value) {
+    let hashtags = value.split(' ');
+    if (hashtags[0] === '' && hashtags.length === 1) {
+      return true;
+    }
+
+    return hashtags.every(element => element !== '#');
+
+  }, "хештег не может состоять из одной #", 4, true);
+
+  pristine.addValidator(hashtagField, function(value) {
+    let hashtags = value.split(' ');
+    let regexp =  /^#[a-zA-Zа-яА-яЁё0-9]{1,19}$|^\s*$/;
+
+    return hashtags.every(element => regexp.test(element));
+
+  }, "хештег должен соответствовать ^#[a-zA-Zа-яА-яЁё0-9]{1,19}$", 3, true);
+
+  pristine.addValidator(hashtagField, (value) => {
+    const result = value.toLowerCase().split(' ');
+    const arr = [];
+    for (let i = 0; i < result.length; i++) {
+      if (arr.includes(result[i])) {
+        return false;
+      }
+      arr.push(result[i]);
+    }
+    return true;
+  }, 'Хештеги не должны повторяться', 4, true);
+
+  pristine.addValidator(hashtagField, (value) => {
+    const hashtags = value.split(' ');
+    if (hashtags[0] === '' && hashtags.length === 1) {
+      return true;
+    }
+    return hashtags.length <= 5;
+
+  }, 'Максимум 5 хештегов', 4, true);
 
   mainForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -59,4 +94,4 @@ uploadFileInput.addEventListener('change', () => {
   openEditImagePopup();
   document.addEventListener('keydown', closeEditImagePopupEsc);
   closeButton.addEventListener('click', closeEditImagePopup);
-})
+});
