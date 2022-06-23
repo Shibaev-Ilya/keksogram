@@ -1,8 +1,13 @@
+import {sendData} from "./server-connect.js";
+
 const mainForm = document.querySelector('#upload-select-image');
 const uploadFileInput = document.querySelector('#upload-file');
 const editImagePopup = document.querySelector('.img-upload__overlay');
 const closeButton = document.querySelector('#upload-cancel');
-const hashtagField = document.querySelector('.text__hashtags');
+const hashTagField = document.querySelector('.text__hashtags');
+const uploadButton = document.querySelector('#upload-submit');
+const errorMessageTemplate = document.querySelector('#error').content;
+export let messageWindow = false;
 
 const openEditImagePopup = () => {
   editImagePopup.classList.remove('hidden');
@@ -16,7 +21,7 @@ const closeEditImagePopup = () => {
   mainForm.reset();
 };
 const closeEditImagePopupEsc = (evt) => {
-  if (evt.key === 'Escape') {
+  if (evt.key === 'Escape' && !messageWindow) {
     if (evt.target.tagName === 'INPUT' || evt.target.tagName === 'TEXTAREA') {
       evt.stopPropagation()
     } else {
@@ -25,11 +30,35 @@ const closeEditImagePopupEsc = (evt) => {
   }
 };
 
+const closeMessage = (evt) => {
+  if (evt.key === 'Escape') {
+    document.querySelector('.error').remove();
+    document.removeEventListener('keydown', closeMessage);
+    messageWindow = false;
+  }
+};
+const onSuccess = () => console.log('ok');
+const onFail = () => {
+  const template = errorMessageTemplate.querySelector('.error').cloneNode(true);
+  template.querySelector('.error__button').addEventListener('click', () => {
+    template.remove();
+    messageWindow = false;
+  });
+  document.body.append(template);
+  messageWindow = true;
+  document.addEventListener('keydown', closeMessage);
+};
+
+export const setDisableButton = (switcher) => {
+  uploadButton.disabled = switcher;
+};
+
+// валидация и отправка
 window.onload = function () {
   // create the pristine instance
   let pristine = new Pristine(mainForm);
 
-  pristine.addValidator(hashtagField, function(value) {
+  pristine.addValidator(hashTagField, function(value) {
     let hashtags = value.split(' ');
     if (hashtags[0] === '' && hashtags.length === 1) {
       return true;
@@ -40,7 +69,7 @@ window.onload = function () {
 
   }, "хештег должен начинаться с #", 3, true);
 
-  pristine.addValidator(hashtagField, function(value) {
+  pristine.addValidator(hashTagField, function(value) {
     let hashtags = value.split(' ');
     if (hashtags[0] === '' && hashtags.length === 1) {
       return true;
@@ -50,7 +79,7 @@ window.onload = function () {
 
   }, "хештег не может состоять из одной #", 4, true);
 
-  pristine.addValidator(hashtagField, function(value) {
+  pristine.addValidator(hashTagField, function(value) {
     let hashtags = value.split(' ');
     let regexp =  /^#[a-zA-Zа-яА-яЁё0-9]{1,19}$|^\s*$/;
 
@@ -58,7 +87,7 @@ window.onload = function () {
 
   }, "хештег должен соответствовать ^#[a-zA-Zа-яА-яЁё0-9]{1,19}$", 3, true);
 
-  pristine.addValidator(hashtagField, (value) => {
+  pristine.addValidator(hashTagField, (value) => {
     const result = value.toLowerCase().split(' ');
     const arr = [];
     for (let i = 0; i < result.length; i++) {
@@ -70,22 +99,24 @@ window.onload = function () {
     return true;
   }, 'Хештеги не должны повторяться', 4, true);
 
-  pristine.addValidator(hashtagField, (value) => {
-    const hashtags = value.split(' ');
-    if (hashtags[0] === '' && hashtags.length === 1) {
+  pristine.addValidator(hashTagField, (value) => {
+    const hashTags = value.split(' ');
+    if (hashTags[0] === '' && hashTags.length === 1) {
       return true;
     }
-    return hashtags.length <= 5;
+    return hashTags.length <= 5;
 
   }, 'Максимум 5 хештегов', 4, true);
 
   mainForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    let body = new FormData(e.target);
 
     // check if the form is valid
     let valid = pristine.validate();
     if (valid) {
-      mainForm.submit();
+      setDisableButton(true);
+      sendData(onSuccess, onFail, body);
     }
   });
 };
