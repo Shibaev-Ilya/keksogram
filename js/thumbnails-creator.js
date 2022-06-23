@@ -1,5 +1,6 @@
 import {createPopup} from "./popup-creator.js";
 
+const picturesContainer = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content;
 
 
@@ -16,7 +17,7 @@ const createThumbnails = (data) => {
     const addPopupHandler = (evt) => {
       evt.preventDefault();
       createPopup(card);
-    }
+    };
 
     img.src = card.url;
     commentsAmount.textContent = card.comments.length;
@@ -25,9 +26,9 @@ const createThumbnails = (data) => {
     element.addEventListener('click', addPopupHandler);
 
     fragment.append(element);
-  })
+  });
 
-  return fragment;
+  picturesContainer.append(fragment);
 };
 
 export {createThumbnails};

@@ -1,9 +1,5 @@
-import {mocks} from './mock-data.js';
-import {createThumbnails} from './thumbnails-creator.js';
 import './form.js';
+import {createThumbnails} from './thumbnails-creator.js';
+import {getData} from './server-connect.js'
 
-export const data = mocks();
-
-const picturesContainer = document.querySelector('.pictures');
-
-picturesContainer.append(createThumbnails(data));
+getData(createThumbnails, (error) => console.log(error));
