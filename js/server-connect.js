@@ -21,10 +21,7 @@ export const sendData = (onSuccess, onFail, body) => {
     SERVER_POST_ADDRESS,
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+      body: body,
     })
     .then((response) => {
       if (response.ok) {
@@ -35,5 +32,5 @@ export const sendData = (onSuccess, onFail, body) => {
       }
       setDisableButton(false);
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log('Ошибка:',error));
 };

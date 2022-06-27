@@ -1,4 +1,5 @@
 import {createPopup} from "./popup-creator.js";
+import {activateFilter} from "./filter.js";
 
 const picturesContainer = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content;
@@ -29,6 +30,9 @@ const createThumbnails = (data) => {
   });
 
   picturesContainer.append(fragment);
+
+  activateFilter();
+
 };
 
 export {createThumbnails};

@@ -7,6 +7,7 @@ const closeButton = document.querySelector('#upload-cancel');
 const hashTagField = document.querySelector('.text__hashtags');
 const uploadButton = document.querySelector('#upload-submit');
 const errorMessageTemplate = document.querySelector('#error').content;
+const successMessageTemplate = document.querySelector('#success').content;
 export let messageWindow = false;
 
 const openEditImagePopup = () => {
@@ -37,13 +38,34 @@ const closeMessage = (evt) => {
     messageWindow = false;
   }
 };
-const onSuccess = () => console.log('ok');
+const closeSuccessMessage = (evt) => {
+  if (evt.key === 'Escape') {
+    document.querySelector('.success').remove();
+    document.removeEventListener('keydown', closeMessage);
+    messageWindow = false;
+  }
+};
+
+const onSuccess = () => {
+  const template = successMessageTemplate.querySelector('.success').cloneNode(true);
+  template.querySelector('.success__button').addEventListener('click', () => {
+    template.remove();
+    messageWindow = false;
+  });
+  document.body.append(template);
+  messageWindow = true;
+  document.addEventListener('keydown', closeSuccessMessage);
+  closeEditImagePopup();
+};
+
 const onFail = () => {
   const template = errorMessageTemplate.querySelector('.error').cloneNode(true);
   template.querySelector('.error__button').addEventListener('click', () => {
     template.remove();
     messageWindow = false;
   });
+  template.querySelector('.error__button').textContent = 'Повторить';
+  template.querySelector('.error__title').textContent = "Ошибка при публикации фото";
   document.body.append(template);
   messageWindow = true;
   document.addEventListener('keydown', closeMessage);
@@ -55,7 +77,7 @@ export const setDisableButton = (switcher) => {
 
 // валидация и отправка
 window.onload = function () {
-  // create the pristine instance
+
   let pristine = new Pristine(mainForm);
 
   pristine.addValidator(hashTagField, function(value) {
@@ -110,13 +132,10 @@ window.onload = function () {
 
   mainForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    let body = new FormData(e.target);
-
-    // check if the form is valid
     let valid = pristine.validate();
     if (valid) {
       setDisableButton(true);
-      sendData(onSuccess, onFail, body);
+      sendData(onSuccess, onFail, new FormData(e.target));
     }
   });
 };

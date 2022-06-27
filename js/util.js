@@ -22,4 +22,18 @@ function getRandom (elementIndex) {
   return elementIndex[getRandomIntInclusive(0, elementIndex.length - 1)];
 }
 
-export {getRandomIntInclusive, getRandom, checkLength};
+const errorMessage = () => {
+  const message = document.createElement('DIV');
+  message.style.backgroundColor = 'red';
+  message.style.position = 'fixed';
+  message.style.top = '0';
+  message.style.padding = '0 20px';
+  message.insertAdjacentHTML('beforeend', '<p>Произошла ошибка, обновите страницу</p>');
+  document.body.append(message);
+  function removeMessage() {
+    message.remove();
+  }
+  window.setTimeout(removeMessage, 3000);
+};
+
+export {getRandomIntInclusive, getRandom, checkLength, errorMessage};
