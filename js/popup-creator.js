@@ -27,7 +27,7 @@ const createPopup = (card) => {
         closePopup();
       }
   };
-  const renderComments = (commentsToRender) => {
+  const renderComments = (commentsToRender, showMore) => {
     let commentsFragment = document.createDocumentFragment();
 
     commentsToRender.forEach( dataComment => {
@@ -38,7 +38,9 @@ const createPopup = (card) => {
       comment.querySelector('.social__text').textContent = dataComment.message;
       commentsFragment.append(comment);
     });
-    commentsList.innerHTML = '';
+    if (!showMore) {
+      commentsList.innerHTML = '';
+    }
     commentsList.append(commentsFragment);
   };
 
@@ -53,12 +55,13 @@ const createPopup = (card) => {
   const clickShowMore = (evt) => {
     evt.preventDefault();
 
+
+    commentsToRender = postComments.slice(showedCommentAmount, showedCommentAmount + commentsPerPage);
     showedCommentAmount = showedCommentAmount + commentsPerPage;
-    commentsToRender = postComments.slice(0, showedCommentAmount);
 
-    renderComments(commentsToRender);
+    renderComments(commentsToRender, true);
 
-    if (postComments.length <= commentsToRender.length) {
+    if (postComments.length <= showedCommentAmount) {
       buttonShowMore.classList.add('hidden');
       showedCommentsCount.textContent = `${commentsToRender.length}`;
     } else {
@@ -69,7 +72,8 @@ const createPopup = (card) => {
   if (postComments.length <= commentsPerPage) {
     buttonShowMore.classList.add('hidden');
     showedCommentsCount.textContent = `${postComments.length}`;
-  } else {
+  }
+  else {
     buttonShowMore.classList.remove('hidden');
     buttonShowMore.addEventListener('click', clickShowMore);
     showedCommentsCount.textContent = `${commentsPerPage}`;
