@@ -1,4 +1,5 @@
 import {sendData} from "./server-connect.js";
+import {resetImageStyles} from "./photo-editor.js";
 
 const mainForm = document.querySelector('#upload-select-image');
 const uploadFileInput = document.querySelector('#upload-file');
@@ -47,6 +48,7 @@ const closeSuccessMessage = (evt) => {
 };
 
 const onSuccess = () => {
+  resetImageStyles();
   const template = successMessageTemplate.querySelector('.success').cloneNode(true);
   template.querySelector('.success__button').addEventListener('click', () => {
     template.remove();

@@ -46,15 +46,15 @@
               <div class="img-upload__preview-container">
 
                 <!-- Изменение размера изображения -->
-                <fieldset class="img-upload__scale  scale">
-                  <button type="button" class="scale__control  scale__control--smaller">Уменьшить</button>
-                  <input type="text" class="scale__control  scale__control--value" value="55%" title="Image Scale"
+                <fieldset class="img-upload__scale scale js-scale">
+                  <button type="button" class="scale__control  scale__control--smaller js-smaller">Уменьшить</button>
+                  <input type="text" class="scale__control  scale__control--value js-scale-input" value="100%" title="Image Scale"
                          name="scale" readonly>
-                  <button type="button" class="scale__control  scale__control--bigger">Увеличить</button>
+                  <button type="button" class="scale__control  scale__control--bigger js-bigger">Увеличить</button>
                 </fieldset>
 
                 <!-- Предварительный просмотр изображения -->
-                <div class="img-upload__preview">
+                <div class="img-upload__preview js-img">
                   <img src="img/upload-default-image.jpg" alt="Предварительный просмотр фотографии">
                 </div>
 
@@ -69,7 +69,7 @@
               </div>
 
               <!-- Наложение эффекта на изображение -->
-              <fieldset class="img-upload__effects  effects">
+              <fieldset class="img-upload__effects  effects js-effects">
                 <ul class="effects__list">
                   <li class="effects__item">
                     <input type="radio" class="effects__radio  visually-hidden" name="effect" id="effect-none"
@@ -248,6 +248,7 @@
   <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
 </template>
 <script src="modules/pristine/pristine.js" type="text/javascript"></script>
+<script src="modules/nouislider/nouislider.js" type="text/javascript"></script>
 <script type="module" defer src="js/main.js"></script>
 </body>
 </html>
