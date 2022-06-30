@@ -51,12 +51,9 @@ const effectsHandler = (evt) => {
  if (evt.target.classList.contains('effects__radio')) {
    let value = evt.target.value;
    if (imgElement.classList.length > 0) {
-     let classes = `${imgElement.classList}`;
-     imgElement.classList.remove(classes);
+     imgElement.classList.forEach(el => imgElement.classList.remove(el));
    }
    imgElement.classList.add(`effects__preview--${value}`);
-
-   console.log(value);
  }
 }
 
@@ -68,6 +65,5 @@ export const resetImageStyles = () => {
   scaleInputElement.value = '100%';
   imgElement.style.transform = 'scale(1)';
 
-  let classes = `${imgElement.classList}`;
-  imgElement.classList.remove(classes);
+  imgElement.classList.forEach(el => imgElement.classList.remove(el));
 }
