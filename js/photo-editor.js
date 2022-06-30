@@ -67,4 +67,7 @@ effectsElement.addEventListener('click', effectsHandler);
 export const resetImageStyles = () => {
   scaleInputElement.value = '100%';
   imgElement.style.transform = 'scale(1)';
+
+  let classes = `${imgElement.classList}`;
+  imgElement.classList.remove(classes);
 }
