@@ -57,14 +57,15 @@ const createPopup = (card) => {
 
 
     commentsToRender = postComments.slice(showedCommentAmount, showedCommentAmount + commentsPerPage);
-    showedCommentAmount = showedCommentAmount + commentsPerPage;
+    showedCommentAmount += commentsPerPage;
 
     renderComments(commentsToRender, true);
 
     if (postComments.length <= showedCommentAmount) {
       buttonShowMore.classList.add('hidden');
-      showedCommentsCount.textContent = `${commentsToRender.length}`;
+      showedCommentsCount.textContent = `${postComments.length}`;
     } else {
+      showedCommentsCount.textContent = `${showedCommentAmount}`;
       buttonShowMore.classList.remove('hidden');
     }
   };
