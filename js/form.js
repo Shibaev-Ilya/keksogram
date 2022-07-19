@@ -20,6 +20,7 @@ const closeEditImagePopup = () => {
   document.body.classList.remove('modal-open');
   closeButton.removeEventListener('click', closeEditImagePopup);
   document.removeEventListener('keydown', closeEditImagePopupEsc);
+  resetImageStyles();
   mainForm.reset();
 };
 const closeEditImagePopupEsc = (evt) => {
