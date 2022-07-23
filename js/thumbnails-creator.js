@@ -7,6 +7,8 @@ const template = document.querySelector('#picture').content;
 
 const createThumbnails = (data) => {
 
+  picturesContainer.querySelectorAll('.picture').forEach(el => el.remove());
+
   let fragment = document.createDocumentFragment();
 
   data.forEach((card) => {
@@ -30,8 +32,6 @@ const createThumbnails = (data) => {
   });
 
   picturesContainer.append(fragment);
-
-  activateFilter();
 
 };
 

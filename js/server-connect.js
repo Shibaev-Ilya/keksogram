@@ -1,4 +1,5 @@
 import {setDisableButton} from "./form.js";
+import {activateFilter} from "./filter.js";
 
 const SERVER_GET_ADDRESS = 'https://26.javascript.pages.academy/kekstagram/data';
 const SERVER_POST_ADDRESS = 'https://26.javascript.pages.academy/kekstagram';
@@ -9,7 +10,10 @@ export const getData = (onSuccess, onError) => {
       if (!response.ok) {
         onError();
       } else {
-        response.json().then((posts) => onSuccess(posts));
+        response.json().then((posts) => {
+          onSuccess(posts);
+          activateFilter(posts);
+        });
       }
 
     })
