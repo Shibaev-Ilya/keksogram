@@ -28,6 +28,21 @@ const checkClass = (currentButton) => {
   });
 }
 
+const sortByComments = (data) => {
+  const newData = data.slice();
+  return newData.sort(function(a, b) {
+    const lengthA = a.comments.length;
+    const lengthB = b.comments.length;
+    if (lengthA > lengthB) {
+      return -1;
+    }
+    if (lengthA < lengthB) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
 const onChangeFilter = (evt) => {
 
   switch (evt.target.id) {
@@ -36,11 +51,11 @@ const onChangeFilter = (evt) => {
       checkClass(evt.target);
       break;
     case filterType.DISCUSSED:
-      console.log('cjmments');
+      createThumbnails(sortByComments(posts))
       checkClass(evt.target);
       break;
     case filterType.DEFAULT:
-      console.log('def');
+      createThumbnails(posts);
       checkClass(evt.target);
       break;
   }
