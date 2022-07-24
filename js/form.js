@@ -2,14 +2,16 @@ import {sendData} from "./server-connect.js";
 import {resetImageStyles} from "./photo-editor.js";
 
 const mainForm = document.querySelector('#upload-select-image');
-const uploadFileInput = document.querySelector('#upload-file');
 const editImagePopup = document.querySelector('.img-upload__overlay');
 const closeButton = document.querySelector('#upload-cancel');
 const hashTagField = document.querySelector('.text__hashtags');
 const uploadButton = document.querySelector('#upload-submit');
 const errorMessageTemplate = document.querySelector('#error').content;
 const successMessageTemplate = document.querySelector('#success').content;
+const uploadFileInput = document.querySelector('#upload-file');
+const imgElement = document.querySelector('.js-img img');
 export let messageWindow = false;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const openEditImagePopup = () => {
   editImagePopup.classList.remove('hidden');
@@ -143,7 +145,19 @@ window.onload = function () {
   });
 };
 
+const showUploadImage = (fileInput, imgTag) => {
+  const file = fileInput.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => {
+    return fileName.endsWith(it);
+  });
+  if (matches) {
+    imgTag.src = URL.createObjectURL(file);
+  }
+}
+
 uploadFileInput.addEventListener('change', () => {
+  showUploadImage(uploadFileInput, imgElement);
   openEditImagePopup();
   document.addEventListener('keydown', closeEditImagePopupEsc);
   closeButton.addEventListener('click', closeEditImagePopup);
